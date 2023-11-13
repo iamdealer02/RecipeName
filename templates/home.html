@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.0.3/css/countrySelect.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .card{
+            padding: 10% 10% 10% 10%;
+        }
+    </style>
+</head>
+<body class="bg-secondary">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="main-body ">
+
+            <div class="row gutters-sm flex-row align-items-center">
+                <div class="col-md-10 mb-3">
+                    <div class="card text-light bg-dark">
+                        <div class="card-body text-center">
+                            
+                            <h3 class="bg">WELCOME TO RECEPIE-NAMA</h3>
+                            <h4 class="h4">DISCOVER THE LONG-LOST TASTE</h4>
+                            <a href="{{url_for('register')}}"> 
+                                <button class="btn btn-light mt-3"> REGISTER </button>
+                            </a>
+                            <a href="{{url_for('login')}}">
+                                <button class="btn btn-light mt-3"> LOGIN TO POST AND SEE RECEPIES </button>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+
+
+</body>
+</html>

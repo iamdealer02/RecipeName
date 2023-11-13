@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.0.3/css/countrySelect.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        html {
+            background: #FAF7F2;
+            background-image: url(https://s3.postimg.org/s1n3ji1ur/paper_fibers_2_X.png);
+            box-sizing: border-box;
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        .u-clearfix:before,
+        .u-clearfix:after {
+            content: " ";
+            display: table;
+        }
+
+        .u-clearfix:after {
+            clear: both;
+        }
+
+        .u-clearfix {
+            *zoom: 1;
+        }
+
+        .subtle {
+            color: #aaa;
+        }
+
+        .card-container {
+            background: #FAF7F2;
+            margin: 25px auto 0;
+            position: relative;
+            width: 692px;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 0 5px rgba(75, 75, 75, .07);
+            z-index: 1;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center; /* Center align items vertically */
+        }
+
+        .card-media {
+            max-width: 100%;
+            margin-left: 20px; /* Add margin to the left to create space */
+        }
+
+        .card-number {
+            margin-top: 15px;
+        }
+
+        .card-circle {
+            border: 1px solid #aaa;
+            border-radius: 50%;
+            display: inline-block;
+            line-height: 22px;
+            font-size: 12px;
+            height: 25px;
+            text-align: center;
+            width: 25px;
+        }
+
+        .card-author {
+            display: block;
+            font-size: 12px;
+            letter-spacing: .5px;
+            margin: 15px 0 0;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 60px;
+            font-weight: 300;
+            line-height: 60px;
+            margin: 10px 0;
+        }
+
+        .card-description {
+            display: inline-block;
+            font-weight: 300;
+            line-height: 22px;
+            margin: 10px 0;
+        }
+
+        .card-read {
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            margin: 5px 0 20px;
+            position: relative;
+            text-align: right;
+            text-transform: uppercase;
+        }
+
+        .card-read:after {
+            background-color: #b8bddd;
+            content: "";
+            display: block;
+            height: 1px;
+            position: absolute;
+            top: 9px;
+            width: 75%;
+        }
+
+        .card-tag {
+            float: right;
+            margin: 5px 0 0;
+        }
+
+        .card-media {
+            float: left;
+            margin-right: 10%;
+        }
+
+        .card-shadow {
+            background-color: #fff;
+            box-shadow: 0 2px 25px 2px rgba(0, 0, 0, 1), 0 2px 50px 2px rgba(0, 0, 0, 1), 0 0 100px 3px rgba(0, 0, 0, .25);
+            height: 1px;
+            margin: -1px auto 0;
+            width: 80%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+      <div class="breadcrumb mt-5">
+          <li class="breadcrumb-item">{% trans 'HOME' %}</li>
+      </div>
+      
+      <form action="{{ url_for('set_locale') }}" method="post">
+          <select name="lang">
+              {% for lang_code, lang_name in get_languages() %}
+                  <option value="{{ lang_code }}" {% if lang_code == selected_language %}selected{% endif %}>
+                      {{ lang_name }}
+                  </option>
+              {% endfor %}
+          </select>
+          <input type="submit" value="{% trans 'Set Language' %}">
+          {{ csrf_token() }}
+      </form>
+
+      <div class="card border-dark">
+          <div>{% trans 'POST YOUR RECIPE' %}</div>
+          <div class="Newrecipe">
+              <button class="btn btn-light ml-5" onclick="CreateForm()">{% trans 'Click' %}</button>
+          </div>
+      </div>
+
+      <!-- ... (your existing card containers) ... -->
+
+      {% for recipe in recipes %}
+          <div class="card-container">
+              <div class="card u-clearfix">
+                  <div class="card-body d-flex flex-row ">
+                      <div>
+                          <span class="card-number card-circle subtle">01</span>
+                          <span class="card-author subtle">{{ gettext(recipe.author) }}</span>
+                          <h2 class="card-title">{{ gettext(recipe.title) }}</h2>
+                          {% set words = recipe.descriptions.split() %}
+                          <span class="card-description subtle">{{ gettext(words[:20]|join(' ')) }}</span>
+                          <a href="/recipe/view/{{ recipe._id }}"> <div class="card-read">{% trans 'Read' %}</div></a>
+                          <span class="card-tag card-circle subtle">C</span>
+                      </div>
+                      {% if recipe.images %}
+                          <div style="text-align: center;">
+                              <img src="{{ url_for('get_media', media_id=recipe.images) }}" class="img-fluid" alt="Media" style="margin: auto; display: block;" height="50%" width="50%">
+                          </div>
+                      {% endif %}
+                  </div>
+              </div>
+              <div class="card-shadow"></div>
+          </div>
+      {% endfor %}
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+      function CreateForm() {
+          var cardContainer = document.querySelector('.Newrecipe');
+          cardContainer.innerHTML = '<form method="POST" action="/receipes/post" enctype="multipart/form-data">' +
+              '<div class="form-group">' +
+              '<label for="recipeName">{{ gettext("Recipe Name") }}:</label>' +
+              '<input type="text" class="form-control" id="recipeName" name="recipeName">' +
+              '</div>' +
+              '<div class="form-group">' +
+              '<label for="ingredients">{{ gettext("Ingredients") }}:</label>' +
+              '<textarea class="form-control" id="ingredients" name="ingredients"></textarea>' +
+              '</div>' +
+              '<div class="form-group">' +
+              '<label for="details">{{ gettext("Details") }}:</label>' +
+              '<input type="text" class="form-control" id="details" name="details">' +
+              '</div>' +
+              '<div class="form-group">' +
+              '<label for="recipeImage">{{ gettext("Upload Recipe Image") }}:</label>' +
+              '<input type="file" class="form-control-file" id="recipeImage" name="recipeImage" accept="image/*">' +
+              '<img class="form-image" id="previewImage" src="" alt="Image Preview">' +
+              '</div>' +
+              '<button class="btn btn-primary">{{ gettext("Submit") }}</button>';
+              
+          // Add event listener to update image preview
+          var imageInput = document.getElementById('recipeImage');
+          var previewImage = document.getElementById('previewImage');
+
+          imageInput.addEventListener('change', function () {
+              if (imageInput.files && imageInput.files[0]) {
+                  var reader = new FileReader();
+
+                  reader.onload = function (e) {
+                      previewImage.src = e.target.result;
+                  }
+
+                  reader.readAsDataURL(imageInput.files[0]);
+              }
+          });
+      }
+  </script>
+</body>
+</html>
